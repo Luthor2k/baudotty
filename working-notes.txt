@@ -1,0 +1,78 @@
+*raw clock signal is 100MHz
+
+with N = 6, i_clock = 1563 kHz
+want 9600 baud,
+1563khz / 9.6khz = 162.8125 clocks per bit
+output looks like crap
+
+N = 6 and clks per bit = 256 fine at 6098 baud
+N = 6 and clks per bit = 163 fine at 9600 baud
+
+yet, on the tapeout proj, all clocks must be external
+max tapeout clk is about 12khz?
+teletype is going to run.. off a 555 right?
+N = 19 is about as low as fractional use of the logic analyzer can go
+
+really do need more than 1 clock per bit or the rx isnt happy
+
+as found N = 15, div = 8
+want to test for 50 baud, lowest serial port setting?
+N = 6 and clks per bit = 31296 fine at 50 baud?
+10 and 1956 no
+12 and 978 no
+13 and 489 no
+11 and 163 yes at 300 baud
+
+using teletape reader?
+14 and 135 lookin good! 45ish baud!
+
+ascii out at 9600 not great when using div 6 clk with an external loopback cable..
+slower clock needed for tapeout project
+
+6 and 163 for 9600 works
+10 and 163 for 600? works w internal loop.. works externally!!!! 97.640kHz ext clock
+how low can it go?
+97640/163=599.018
+11 and 163 works at 300 baud into the pc and is really 299.509 baud soo... +/- a Hz ok
+
+tty reading from tape reader is 23.0ms / bit.. 43.48Hz
+tty reader with 1x clocks per bit... N=14 and 135 Clk/B, iClock = 6102Hz
+6102/135 = 45.2 checks out
+435/10 going to work? 435Hz / 10.... garbage
+870/20 msotly garbled
+1740/40 good! about 15/80 chars garbled
+3480/80 better, 6/80 garbled
+6960/160, 9/80... hm maybe output uart needs higher clock?
+
+lowering output Uart from 19200clk & 2 div
+set at: 4800 & 8, pc baud at 600... garbage
+9600 and 16, pc at 600... garbled but there
+with 'A' hardcoded in, there's just 1/80 in error
+9600 / 1 ? every char an error
+9600 / 2 every char an error
+4 bad
+/8? 1/80 bad
+AH! skipping the external clk loopback wire helps a lot!
+working well with minimal external loopback jumpers:
+Baudot 6960 / 160
+Ascii 9600 / 8
+
+David's teletype model 28 is.. ITA2? has UK pound symbol, other notes:
+h05 is ' and not BEL, ITA2 coding
+h09 is $, US-TTY coding
+h0B is BEL and not ', ITA2 coding
+h11 is " US-TTY coding
+h14 is uk pound, not #, ITA2 coding, and the teletpye has a key for it, that works, but no hammer!
+h0D is #, there is no !
+
+is working perfectly.. how about a round number for the rx uart?
+4380 / 100 works perfectly! rad! ascii out at 9600 / 8
+
+
+
+
+
+
+
+
+
