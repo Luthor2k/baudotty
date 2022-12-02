@@ -478,7 +478,7 @@
           "type": "basic.constant",
           "data": {
             "name": "tenXbaudrate",
-            "value": "4350",
+            "value": "2175",
             "local": false
           },
           "position": {
@@ -491,7 +491,7 @@
           "type": "basic.constant",
           "data": {
             "name": "CLKS_PER_BIT",
-            "value": "100",
+            "value": "50",
             "local": false
           },
           "position": {
@@ -530,7 +530,7 @@
           "type": "basic.constant",
           "data": {
             "name": "clk_ascii_out",
-            "value": "8",
+            "value": "1",
             "local": false
           },
           "position": {
@@ -1017,14 +1017,14 @@
               ]
             },
             "params": [],
-            "code": "//-- lettersrom memory\nreg [7:0] lettersrom [0:31];\n\nreg [7:0] numbersrom [0:31];\n\n//-- ASCII_INPUT (8 bits)\nwire [4:0] BAUDOT_IN;\n\n//-- Baudot OUTPUT (5 bits)\nreg [7:0] ASCII_OUT;\n\nreg enable_numbers = 0; //default to letter set\n\nalways @(posedge clk) begin\n  //are we receiving a letters or numbers set change?\n  if (BAUDOT_IN == 27)\n    begin\n      enable_numbers <= 1; // set to figs mode\n    end\n  if (BAUDOT_IN == 31)\n    begin\n      enable_numbers <= 0; // set to letters  mode\n    end  \n  if (enable_numbers == 0)\n    begin\n      ASCII_OUT <= lettersrom[BAUDOT_IN];\n    end\n  else\n    begin\n      ASCII_OUT <= numbersrom[BAUDOT_IN];\n    end\nend\n\n  initial begin\n    lettersrom[0] = 8'h00; // NUL\n    lettersrom[1] = 8'h45; // E\n    lettersrom[2] = 8'h0A; // LF\n    lettersrom[3] = 8'h41; // A\n    lettersrom[4] = 8'h20; // SP\n    lettersrom[5] = 8'h53; // S\n    lettersrom[6] = 8'h49; // I\n    lettersrom[7] = 8'h55; // U\n    lettersrom[8] = 8'h0D; // CR **** modding to 0A(LF) from 0D(CR) for tests\n    lettersrom[9] = 8'h44; // D\n    lettersrom[10] = 8'h52; // R\n    lettersrom[11] = 8'h4A; // J\n    lettersrom[12] = 8'h4E; // N\n    lettersrom[13] = 8'h46; // F\n    lettersrom[14] = 8'h43; // C\n    lettersrom[15] = 8'h4B; // K\n    \n    lettersrom[16] = 8'h54; // T\n    lettersrom[17] = 8'h5A; // Z\n    lettersrom[18] = 8'h4C; // L\n    lettersrom[19] = 8'h57; // W\n    lettersrom[20] = 8'h48; // H\n    lettersrom[21] = 8'h59; // Y\n    lettersrom[22] = 8'h50; // P\n    lettersrom[23] = 8'h51; // Q\n    lettersrom[24] = 8'h4F; // O\n    lettersrom[25] = 8'h42; // B\n    lettersrom[26] = 8'h47; // G\n    lettersrom[27] = 8'h00; // FIGS, h23 is #\n    lettersrom[28] = 8'h4D; // M\n    lettersrom[29] = 8'h58; // X\n    lettersrom[30] = 8'h56; // V\n    lettersrom[31] = 8'h08; // LTRS/DEL, h08 is DEL, to be sent when in LTRS mode only\n    \n    numbersrom[0] = 8'h00; // NUL\n    numbersrom[1] = 8'h33; // 3\n    numbersrom[2] = 8'h0A; // LF\n    numbersrom[3] = 8'h2D; // -\n    numbersrom[4] = 8'h20; // SP\n    //numbersrom[5] = 8'h07; // BEL\n    numbersrom[5] = 8'h27; // '\n    numbersrom[6] = 8'h38; // 8\n    numbersrom[7] = 8'h37; // 7\n    numbersrom[8] = 8'h0D; // CR\n    numbersrom[9] = 8'h24; // $\n    numbersrom[10] = 8'h34; // 4\n    //numbersrom[11] = 8'h27; // '\n    numbersrom[11] = 8'h07; // BEL\n    numbersrom[12] = 8'h2C; // ,\n    numbersrom[13] = 8'h23; // #\n    numbersrom[14] = 8'h3A; // :\n    numbersrom[15] = 8'h28; // (\n    \n    numbersrom[16] = 8'h35; //10 5\n    numbersrom[17] = 8'h22; //11 \"\n    numbersrom[18] = 8'h29; //12 )\n    numbersrom[19] = 8'h32; //13 2\n    numbersrom[20] = 8'h21; //14 should be UK # but hammer is missing! will make ! instead\n    numbersrom[21] = 8'h36; // 6\n    numbersrom[22] = 8'h30; // 0\n    numbersrom[23] = 8'h31; // 1\n    numbersrom[24] = 8'h39; // 9\n    numbersrom[25] = 8'h3F; // ?\n    numbersrom[26] = 8'h26; // &\n    numbersrom[27] = 8'h00; // FIGS, h23 is #\n    numbersrom[28] = 8'h2E; // .\n    numbersrom[29] = 8'h2F; // /\n    numbersrom[30] = 8'h3B; // ;\n    numbersrom[31] = 8'h00; // LTRS, so send null\n   end\n"
+            "code": "//-- lettersrom memory\nreg [7:0] lettersrom [0:31];\n\nreg [7:0] numbersrom [0:31];\n\n//-- ASCII_INPUT (8 bits)\nwire [4:0] BAUDOT_IN;\n\n//-- Baudot OUTPUT (5 bits)\nreg [7:0] ASCII_OUT;\n\nreg enable_numbers = 0; //default to letter set\n\nalways @(posedge clk) begin\n  //are we receiving a letters or numbers set change?\n  if (BAUDOT_IN == 27)\n    begin\n      enable_numbers <= 1; // set to figs mode\n    end\n  if (BAUDOT_IN == 31)\n    begin\n      enable_numbers <= 0; // set to letters  mode\n    end  \n  if (enable_numbers == 0)\n    begin\n      ASCII_OUT <= lettersrom[BAUDOT_IN];\n    end\n  else\n    begin\n      ASCII_OUT <= numbersrom[BAUDOT_IN];\n    end\nend\n\n  initial begin\n    lettersrom[0] = 8'h00; // NUL\n    lettersrom[1] = 8'h45; // E\n    lettersrom[2] = 8'h0A; // LF\n    lettersrom[3] = 8'h41; // A\n    lettersrom[4] = 8'h20; // SP\n    lettersrom[5] = 8'h53; // S\n    lettersrom[6] = 8'h49; // I\n    lettersrom[7] = 8'h55; // U\n    lettersrom[8] = 8'h0D; // CR\n    lettersrom[9] = 8'h44; // D\n    lettersrom[10] = 8'h52; // R\n    lettersrom[11] = 8'h4A; // J\n    lettersrom[12] = 8'h4E; // N\n    lettersrom[13] = 8'h46; // F\n    lettersrom[14] = 8'h43; // C\n    lettersrom[15] = 8'h4B; // K\n    \n    lettersrom[16] = 8'h54; // T\n    lettersrom[17] = 8'h5A; // Z\n    lettersrom[18] = 8'h4C; // L\n    lettersrom[19] = 8'h57; // W\n    lettersrom[20] = 8'h48; // H\n    lettersrom[21] = 8'h59; // Y\n    lettersrom[22] = 8'h50; // P\n    lettersrom[23] = 8'h51; // Q\n    lettersrom[24] = 8'h4F; // O\n    lettersrom[25] = 8'h42; // B\n    lettersrom[26] = 8'h47; // G\n    lettersrom[27] = 8'h00; // FIGS, h23 is #\n    lettersrom[28] = 8'h4D; // M\n    lettersrom[29] = 8'h58; // X\n    lettersrom[30] = 8'h56; // V\n    lettersrom[31] = 8'h08; // LTRS/DEL, h08 is DEL, to be sent when in LTRS mode only\n    \n    numbersrom[0] = 8'h00; // NUL\n    numbersrom[1] = 8'h33; // 3\n    numbersrom[2] = 8'h0A; // LF\n    numbersrom[3] = 8'h2D; // -\n    numbersrom[4] = 8'h20; // SP\n    //numbersrom[5] = 8'h07; // BEL\n    numbersrom[5] = 8'h27; // '\n    numbersrom[6] = 8'h38; // 8\n    numbersrom[7] = 8'h37; // 7\n    numbersrom[8] = 8'h0D; // CR\n    numbersrom[9] = 8'h24; // $\n    numbersrom[10] = 8'h34; // 4\n    //numbersrom[11] = 8'h27; // '\n    numbersrom[11] = 8'h07; // BEL\n    numbersrom[12] = 8'h2C; // ,\n    numbersrom[13] = 8'h23; // #\n    numbersrom[14] = 8'h3A; // :\n    numbersrom[15] = 8'h28; // (\n    \n    numbersrom[16] = 8'h35; //10 5\n    numbersrom[17] = 8'h22; //11 \"\n    numbersrom[18] = 8'h29; //12 )\n    numbersrom[19] = 8'h32; //13 2\n    numbersrom[20] = 8'h21; //14 should be UK # but hammer is missing! will make ! instead\n    numbersrom[21] = 8'h36; // 6\n    numbersrom[22] = 8'h30; // 0\n    numbersrom[23] = 8'h31; // 1\n    numbersrom[24] = 8'h39; // 9\n    numbersrom[25] = 8'h3F; // ?\n    numbersrom[26] = 8'h26; // &\n    numbersrom[27] = 8'h00; // FIGS, h23 is #\n    numbersrom[28] = 8'h2E; // .\n    numbersrom[29] = 8'h2F; // /\n    numbersrom[30] = 8'h3B; // ;\n    numbersrom[31] = 8'h00; // LTRS, so send null\n   end\n"
           },
           "position": {
             "x": 2440,
             "y": -704
           },
           "size": {
-            "width": 504,
+            "width": 680,
             "height": 496
           }
         },

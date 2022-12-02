@@ -68,9 +68,10 @@ h0D is #, there is no !
 is working perfectly.. how about a round number for the rx uart?
 4380 / 100 works perfectly! rad! ascii out at 9600 / 8
 
+9600 / 1 works fine too for ascii out
 
-
-
+how about 2175 / 50 and 4800 / 1 for some safety?
+works! sticking to this
 
 
 

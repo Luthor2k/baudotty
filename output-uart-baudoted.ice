@@ -12,44 +12,6 @@
     "graph": {
       "blocks": [
         {
-          "id": "75f93c14-5828-4da4-a829-cef4dd5ab3d4",
-          "type": "basic.output",
-          "data": {
-            "name": "BAUDOT_CLK_GEN",
-            "virtual": false,
-            "pins": [
-              {
-                "index": "0",
-                "name": "P110",
-                "value": "34"
-              }
-            ]
-          },
-          "position": {
-            "x": 1000,
-            "y": -1336
-          }
-        },
-        {
-          "id": "8bbb1eb8-3b9c-4dbc-8f03-38441d8b7d42",
-          "type": "basic.output",
-          "data": {
-            "name": "ASCII_CLK_GEN",
-            "virtual": false,
-            "pins": [
-              {
-                "index": "0",
-                "name": "P120",
-                "value": "32"
-              }
-            ]
-          },
-          "position": {
-            "x": 4064,
-            "y": -1184
-          }
-        },
-        {
           "id": "7996933e-c8fd-41c0-a53f-1061d3de1555",
           "type": "basic.output",
           "data": {
@@ -104,7 +66,7 @@
             "clock": false
           },
           "position": {
-            "x": 1296,
+            "x": 1320,
             "y": -528
           }
         },
@@ -117,8 +79,8 @@
             "pins": [
               {
                 "index": "0",
-                "name": "P40",
-                "value": "104"
+                "name": "P31",
+                "value": "102"
               }
             ]
           },
@@ -145,63 +107,6 @@
           "position": {
             "x": 3144,
             "y": -416
-          }
-        },
-        {
-          "id": "43395114-7f81-402c-8145-3fe91345fb5b",
-          "type": "basic.output",
-          "data": {
-            "name": "BAUD_LED",
-            "virtual": false,
-            "pins": [
-              {
-                "index": "0",
-                "name": "LED1",
-                "value": "71"
-              }
-            ]
-          },
-          "position": {
-            "x": 1488,
-            "y": -360
-          }
-        },
-        {
-          "id": "2c529d93-4390-4fb5-8c2b-cfd83edc52c5",
-          "type": "basic.output",
-          "data": {
-            "name": "to-pc",
-            "virtual": false,
-            "pins": [
-              {
-                "index": "0",
-                "name": "P50",
-                "value": "143"
-              }
-            ]
-          },
-          "position": {
-            "x": 4264,
-            "y": -304
-          }
-        },
-        {
-          "id": "1f4104c1-0db6-4c6a-9a29-120a035f8556",
-          "type": "basic.output",
-          "data": {
-            "name": "BAUDOT_copy",
-            "virtual": false,
-            "pins": [
-              {
-                "index": "0",
-                "name": "P30",
-                "value": "105"
-              }
-            ]
-          },
-          "position": {
-            "x": 1488,
-            "y": -264
           }
         },
         {
@@ -245,24 +150,11 @@
           }
         },
         {
-          "id": "99392408-802e-47b5-9588-65f9dc0af177",
-          "type": "basic.constant",
-          "data": {
-            "name": "tenXbaudrate",
-            "value": "4350",
-            "local": false
-          },
-          "position": {
-            "x": 632,
-            "y": -1664
-          }
-        },
-        {
           "id": "e221cc1e-831c-4d95-bb1e-47682f40d960",
           "type": "basic.constant",
           "data": {
             "name": "CLKS_PER_BIT",
-            "value": "100",
+            "value": "50",
             "local": false
           },
           "position": {
@@ -271,93 +163,16 @@
           }
         },
         {
-          "id": "84e2b9c9-654a-4b8d-ac90-03fa186c2eff",
-          "type": "basic.constant",
-          "data": {
-            "name": "baudrate",
-            "value": "9600",
-            "local": false
-          },
-          "position": {
-            "x": 3608,
-            "y": -1536
-          }
-        },
-        {
           "id": "260d67f5-aefe-4f6f-831c-1b35ffdc8d88",
           "type": "basic.constant",
           "data": {
             "name": "clk_ascii_out",
-            "value": "8",
+            "value": "1",
             "local": false
           },
           "position": {
             "x": 3672,
             "y": -800
-          }
-        },
-        {
-          "id": "0810ef40-a861-4d69-81ee-ef79e2da4675",
-          "type": "basic.code",
-          "data": {
-            "ports": {
-              "in": [
-                {
-                  "name": "clk"
-                }
-              ],
-              "out": [
-                {
-                  "name": "o_clk"
-                }
-              ]
-            },
-            "params": [
-              {
-                "name": "baud"
-              }
-            ],
-            "code": "  wire      clk;\n  reg       r_clk = 0;\n  \n  parameter clk_off = 100000000 / baud;\n  parameter clk_on = clk_off / 2;\n  \n  reg [23:0] start_clk = 0;\n  \n  reg [7:0] count_out;\n\n  always @(posedge clk)\n        begin\n            if (start_clk < clk_on)\n                begin\n                    r_clk <= 1'b1;\n                end\n            else\n                begin\n                    r_clk <= 1'b0;\n                end\n            start_clk <= start_clk + 1;\n            \n            if (start_clk > clk_off)\n                begin\n                    start_clk <= 0;\n                end\n        end\n  \n  assign o_clk = r_clk;"
-          },
-          "position": {
-            "x": 432,
-            "y": -1544
-          },
-          "size": {
-            "width": 488,
-            "height": 472
-          }
-        },
-        {
-          "id": "a6d8c103-d010-4d79-a96b-33bac8a78fdc",
-          "type": "basic.code",
-          "data": {
-            "ports": {
-              "in": [
-                {
-                  "name": "clk"
-                }
-              ],
-              "out": [
-                {
-                  "name": "o_clk"
-                }
-              ]
-            },
-            "params": [
-              {
-                "name": "baud"
-              }
-            ],
-            "code": "  wire      clk;\n  reg       r_clk = 0;\n  \n  parameter clk_off = 100000000 / baud;\n  parameter clk_on = clk_off / 2;\n  \n  reg [23:0] start_clk = 0;\n  \n  reg [7:0] count_out;\n\n  always @(posedge clk)\n        begin\n            if (start_clk < clk_on)\n                begin\n                    r_clk <= 1'b1;\n                end\n            else\n                begin\n                    r_clk <= 1'b0;\n                end\n            start_clk <= start_clk + 1;\n            \n            if (start_clk > clk_off)\n                begin\n                    start_clk <= 0;\n                end\n        end\n  \n  assign o_clk = r_clk;"
-          },
-          "position": {
-            "x": 3408,
-            "y": -1392
-          },
-          "size": {
-            "width": 488,
-            "height": 472
           }
         },
         {
@@ -430,15 +245,15 @@
               ]
             },
             "params": [],
-            "code": "//-- lettersrom memory\nreg [7:0] lettersrom [0:31];\n\nreg [7:0] numbersrom [0:31];\n\n//-- ASCII_INPUT (8 bits)\nwire [4:0] BAUDOT_IN;\n\n//-- Baudot OUTPUT (5 bits)\nreg [7:0] ASCII_OUT;\n\nreg enable_numbers = 0; //default to letter set\n\nalways @(posedge clk) begin\n  //are we receiving a letters or numbers set change?\n  if (BAUDOT_IN == 27)\n    begin\n      enable_numbers <= 1; // set to figs mode\n    end\n  if (BAUDOT_IN == 31)\n    begin\n      enable_numbers <= 0; // set to letters  mode\n    end  \n  if (enable_numbers == 0)\n    begin\n      ASCII_OUT <= lettersrom[BAUDOT_IN];\n    end\n  else\n    begin\n      ASCII_OUT <= numbersrom[BAUDOT_IN];\n    end\nend\n\n  initial begin\n    lettersrom[0] = 8'h00; // NUL\n    lettersrom[1] = 8'h45; // E\n    lettersrom[2] = 8'h0A; // LF\n    lettersrom[3] = 8'h41; // A\n    lettersrom[4] = 8'h20; // SP\n    lettersrom[5] = 8'h53; // S\n    lettersrom[6] = 8'h49; // I\n    lettersrom[7] = 8'h55; // U\n    lettersrom[8] = 8'h0D; // CR **** modding to 0A(LF) from 0D(CR) for tests\n    lettersrom[9] = 8'h44; // D\n    lettersrom[10] = 8'h52; // R\n    lettersrom[11] = 8'h4A; // J\n    lettersrom[12] = 8'h4E; // N\n    lettersrom[13] = 8'h46; // F\n    lettersrom[14] = 8'h43; // C\n    lettersrom[15] = 8'h4B; // K\n    \n    lettersrom[16] = 8'h54; // T\n    lettersrom[17] = 8'h5A; // Z\n    lettersrom[18] = 8'h4C; // L\n    lettersrom[19] = 8'h57; // W\n    lettersrom[20] = 8'h48; // H\n    lettersrom[21] = 8'h59; // Y\n    lettersrom[22] = 8'h50; // P\n    lettersrom[23] = 8'h51; // Q\n    lettersrom[24] = 8'h4F; // O\n    lettersrom[25] = 8'h42; // B\n    lettersrom[26] = 8'h47; // G\n    lettersrom[27] = 8'h00; // FIGS, h23 is #\n    lettersrom[28] = 8'h4D; // M\n    lettersrom[29] = 8'h58; // X\n    lettersrom[30] = 8'h56; // V\n    lettersrom[31] = 8'h08; // LTRS/DEL, h08 is DEL, to be sent when in LTRS mode only\n    \n    numbersrom[0] = 8'h00; // NUL\n    numbersrom[1] = 8'h33; // 3\n    numbersrom[2] = 8'h0A; // LF\n    numbersrom[3] = 8'h2D; // -\n    numbersrom[4] = 8'h20; // SP\n    //numbersrom[5] = 8'h07; // BEL\n    numbersrom[5] = 8'h27; // '\n    numbersrom[6] = 8'h38; // 8\n    numbersrom[7] = 8'h37; // 7\n    numbersrom[8] = 8'h0D; // CR\n    numbersrom[9] = 8'h24; // $\n    numbersrom[10] = 8'h34; // 4\n    //numbersrom[11] = 8'h27; // '\n    numbersrom[11] = 8'h07; // BEL\n    numbersrom[12] = 8'h2C; // ,\n    numbersrom[13] = 8'h23; // #\n    numbersrom[14] = 8'h3A; // :\n    numbersrom[15] = 8'h28; // (\n    \n    numbersrom[16] = 8'h35; //10 5\n    numbersrom[17] = 8'h22; //11 \"\n    numbersrom[18] = 8'h29; //12 )\n    numbersrom[19] = 8'h32; //13 2\n    numbersrom[20] = 8'h21; //14 should be UK # but hammer is missing! will make ! instead\n    numbersrom[21] = 8'h36; // 6\n    numbersrom[22] = 8'h30; // 0\n    numbersrom[23] = 8'h31; // 1\n    numbersrom[24] = 8'h39; // 9\n    numbersrom[25] = 8'h3F; // ?\n    numbersrom[26] = 8'h26; // &\n    numbersrom[27] = 8'h00; // FIGS, h23 is #\n    numbersrom[28] = 8'h2E; // .\n    numbersrom[29] = 8'h2F; // /\n    numbersrom[30] = 8'h3B; // ;\n    numbersrom[31] = 8'h00; // LTRS, so send null\n   end\n"
+            "code": "//-- lettersrom memory\nreg [7:0] lettersrom [0:31];\n\nreg [7:0] numbersrom [0:31];\n\n//-- ASCII_INPUT (8 bits)\nwire [4:0] BAUDOT_IN;\n\n//-- Baudot OUTPUT (5 bits)\nreg [7:0] ASCII_OUT;\n\nreg enable_numbers = 0; //default to letter set\n\nalways @(posedge clk) begin\n  //are we receiving a letters or numbers set change?\n  if (BAUDOT_IN == 27)\n    begin\n      enable_numbers <= 1; // set to figs mode\n    end\n  if (BAUDOT_IN == 31)\n    begin\n      enable_numbers <= 0; // set to letters  mode\n    end  \n  if (enable_numbers == 0)\n    begin\n      ASCII_OUT <= lettersrom[BAUDOT_IN];\n    end\n  else\n    begin\n      ASCII_OUT <= numbersrom[BAUDOT_IN];\n    end\nend\n\n  initial begin\n    lettersrom[0] = 8'h00; // NUL\n    lettersrom[1] = 8'h45; // E\n    lettersrom[2] = 8'h0A; // LF\n    lettersrom[3] = 8'h41; // A\n    lettersrom[4] = 8'h20; // SP\n    lettersrom[5] = 8'h53; // S\n    lettersrom[6] = 8'h49; // I\n    lettersrom[7] = 8'h55; // U\n    lettersrom[8] = 8'h0D; // CR \n    lettersrom[9] = 8'h44; // D\n    lettersrom[10] = 8'h52; // R\n    lettersrom[11] = 8'h4A; // J\n    lettersrom[12] = 8'h4E; // N\n    lettersrom[13] = 8'h46; // F\n    lettersrom[14] = 8'h43; // C\n    lettersrom[15] = 8'h4B; // K\n    \n    lettersrom[16] = 8'h54; // T\n    lettersrom[17] = 8'h5A; // Z\n    lettersrom[18] = 8'h4C; // L\n    lettersrom[19] = 8'h57; // W\n    lettersrom[20] = 8'h48; // H\n    lettersrom[21] = 8'h59; // Y\n    lettersrom[22] = 8'h50; // P\n    lettersrom[23] = 8'h51; // Q\n    lettersrom[24] = 8'h4F; // O\n    lettersrom[25] = 8'h42; // B\n    lettersrom[26] = 8'h47; // G\n    lettersrom[27] = 8'h00; // FIGS, h23 is #\n    lettersrom[28] = 8'h4D; // M\n    lettersrom[29] = 8'h58; // X\n    lettersrom[30] = 8'h56; // V\n    lettersrom[31] = 8'h08; // LTRS/DEL, h08 is DEL, to be sent when in LTRS mode only\n    \n    numbersrom[0] = 8'h00; // NUL\n    numbersrom[1] = 8'h33; // 3\n    numbersrom[2] = 8'h0A; // LF\n    numbersrom[3] = 8'h2D; // -\n    numbersrom[4] = 8'h20; // SP\n    //numbersrom[5] = 8'h07; // BEL\n    numbersrom[5] = 8'h27; // '\n    numbersrom[6] = 8'h38; // 8\n    numbersrom[7] = 8'h37; // 7\n    numbersrom[8] = 8'h0D; // CR\n    numbersrom[9] = 8'h24; // $\n    numbersrom[10] = 8'h34; // 4\n    //numbersrom[11] = 8'h27; // '\n    numbersrom[11] = 8'h07; // BEL\n    numbersrom[12] = 8'h2C; // ,\n    numbersrom[13] = 8'h23; // #\n    numbersrom[14] = 8'h3A; // :\n    numbersrom[15] = 8'h28; // (\n    \n    numbersrom[16] = 8'h35; //10 5\n    numbersrom[17] = 8'h22; //11 \"\n    numbersrom[18] = 8'h29; //12 )\n    numbersrom[19] = 8'h32; //13 2\n    numbersrom[20] = 8'h21; //14 should be UK # but hammer is missing! will make ! instead\n    numbersrom[21] = 8'h36; // 6\n    numbersrom[22] = 8'h30; // 0\n    numbersrom[23] = 8'h31; // 1\n    numbersrom[24] = 8'h39; // 9\n    numbersrom[25] = 8'h3F; // ?\n    numbersrom[26] = 8'h26; // &\n    numbersrom[27] = 8'h00; // FIGS, h23 is #\n    numbersrom[28] = 8'h2E; // .\n    numbersrom[29] = 8'h2F; // /\n    numbersrom[30] = 8'h3B; // ;\n    numbersrom[31] = 8'h00; // LTRS, so send null\n   end\n"
           },
           "position": {
             "x": 2440,
             "y": -704
           },
           "size": {
-            "width": 504,
-            "height": 496
+            "width": 656,
+            "height": 560
           }
         },
         {
@@ -505,28 +320,6 @@
         },
         {
           "source": {
-            "block": "0810ef40-a861-4d69-81ee-ef79e2da4675",
-            "port": "o_clk"
-          },
-          "target": {
-            "block": "75f93c14-5828-4da4-a829-cef4dd5ab3d4",
-            "port": "in"
-          },
-          "vertices": []
-        },
-        {
-          "source": {
-            "block": "99392408-802e-47b5-9588-65f9dc0af177",
-            "port": "constant-out"
-          },
-          "target": {
-            "block": "0810ef40-a861-4d69-81ee-ef79e2da4675",
-            "port": "baud"
-          },
-          "vertices": []
-        },
-        {
-          "source": {
             "block": "2c3ae819-a202-4742-905f-886c78facb5e",
             "port": "out"
           },
@@ -543,26 +336,6 @@
           "target": {
             "block": "f8a79511-f76e-46f5-a064-764ff13367a2",
             "port": "baudot_input"
-          }
-        },
-        {
-          "source": {
-            "block": "fcf0930a-db71-4d1e-8e02-6955e6693cc6",
-            "port": "out"
-          },
-          "target": {
-            "block": "43395114-7f81-402c-8145-3fe91345fb5b",
-            "port": "in"
-          }
-        },
-        {
-          "source": {
-            "block": "fcf0930a-db71-4d1e-8e02-6955e6693cc6",
-            "port": "out"
-          },
-          "target": {
-            "block": "1f4104c1-0db6-4c6a-9a29-120a035f8556",
-            "port": "in"
           }
         },
         {
@@ -584,28 +357,6 @@
             "block": "21703182-f03e-43e6-a3f7-9ff4660a7149",
             "port": "clk"
           }
-        },
-        {
-          "source": {
-            "block": "a6d8c103-d010-4d79-a96b-33bac8a78fdc",
-            "port": "o_clk"
-          },
-          "target": {
-            "block": "8bbb1eb8-3b9c-4dbc-8f03-38441d8b7d42",
-            "port": "in"
-          },
-          "vertices": []
-        },
-        {
-          "source": {
-            "block": "84e2b9c9-654a-4b8d-ac90-03fa186c2eff",
-            "port": "constant-out"
-          },
-          "target": {
-            "block": "a6d8c103-d010-4d79-a96b-33bac8a78fdc",
-            "port": "baud"
-          },
-          "vertices": []
         },
         {
           "source": {
@@ -645,16 +396,6 @@
           },
           "target": {
             "block": "352c0289-1927-4771-9532-74613541eb53",
-            "port": "in"
-          }
-        },
-        {
-          "source": {
-            "block": "42352254-bdc8-4c58-b155-ba6cd81f5c0c",
-            "port": "ascii_serial_output"
-          },
-          "target": {
-            "block": "2c529d93-4390-4fb5-8c2b-cfd83edc52c5",
             "port": "in"
           }
         },
